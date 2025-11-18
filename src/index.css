@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@theme {
+  --color-morado: #7112bd; /* Example primary color */
+  --color-lima: #bbe963; /* Example secondary color */
+  --color-azul: #2f428c; /* Dark blue shade */
+  --color-gris-claro: #ccc8c8; /* Light gray for backgrounds */
+  --color-gris-oscuro: #595959; /* Dark gray for text */
+
+  --drop-shadow-3xl: 2px 3px 3px rgba(0, 0, 0, 0.5);
+  --drop-shadow-4xl: 1px 1px 1px rgba(0, 0, 0, 1);
+}
+
+* {
+  font-family: "Roboto Flex", sans-serif;
+}
+.font-roboto-mono {
+  font-family: "Roboto Mono", monospace;
+}
+
+/* Contenedor parallax - siempre fijo a la derecha */
+#parallax {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 40vw;
+  min-width: 280px;
+  background-image: url("./assets/tenis.png"), url("assets/bg1.png"),
+    url("assets/bg2.png");
+  background-repeat: no-repeat;
+  background-position: 100% 0%, 100% 0%, 100% 0%; /* Pegado al top */
+  background-size: contain, contain, contain; /* Cambiado a contain para tenis.png */
+  z-index: -1;
+}
+
+@media (max-width: 1024px) {
+  /* Parallax full width on tablets and mobile */
+  #parallax {
+    width: 100vw;
+    max-width: none;
+    min-width: 0;
+    height: 100vh;
+  }
+}
+
+.menu-element {
+  transition: border-radius 0.2s ease-in-out, padding 0.1s ease-in-out,
+    transform 0.5s ease-in-out;
+}
+
+/* Estado normal (abierto) */
+.menu-element {
+  border-radius: 24px 24px 0px 0px;
+}
+
+/* Estado cerrado */
+.menu-element.closed {
+  border-radius: 5rem;
+}
