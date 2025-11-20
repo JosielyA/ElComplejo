@@ -1,14 +1,61 @@
 @import "tailwindcss";
 
 @theme {
-  --color-morado: #7112bd; /* Example primary color */
-  --color-lima: #bbe963; /* Example secondary color */
-  --color-azul: #2f428c; /* Dark blue shade */
-  --color-gris-claro: #ccc8c8; /* Light gray for backgrounds */
-  --color-gris-oscuro: #595959; /* Dark gray for text */
+  /* Color Palette */
+  --color-morado: #7112bd; /* Primary purple */
+  --color-lima: #bbe963; /* Secondary lime green */
+  --color-azul: #2f428c; /* Accent blue */
+  --color-gris-claro: #ccc8c8; /* Light gray */
+  --color-gris-oscuro: #595959; /* Dark gray */
 
+  /* Custom Shadows */
   --drop-shadow-3xl: 2px 3px 3px rgba(0, 0, 0, 0.5);
   --drop-shadow-4xl: 1px 1px 1px rgba(0, 0, 0, 1);
+  --shadow-3xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+@layer components {
+  /* Nav component*/
+  .button-nav {
+    @apply from-morado via-azul to-lima rounded-full bg-linear-to-r px-6 py-4 font-bold text-white italic shadow-lg transition duration-700;
+    background-size: 200% 200%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .button-nav:hover {
+    animation: gradient-shift 3s ease infinite;
+    transform: scale(1.05);
+  }
+
+  .active-link-nav {
+    @apply text-morado hover:text-morado z-1 block text-lg font-bold italic transition duration-700 lg:text-2xl 2xl:text-2xl;
+  }
+
+  .tennis-ball {
+    @apply drop-shadow-3xl absolute z-0 size-8 lg:-left-4 lg:size-10;
+  }
+
+  .active-link-nav-movile {
+    @apply text-morado z-1 text-lg font-bold italic;
+  }
+
+  .inactive-link-nav-movile {
+    @apply text-gris-oscuro z-1 text-lg font-bold italic;
+  }
+
+  .inactive-link-nav {
+    @apply text-gris-oscuro hover:text-morado z-1 block text-lg font-bold italic transition duration-700 lg:text-2xl 2xl:text-2xl;
+  }
+
+  .burger-button {
+    @apply rounded-full p-3 transition duration-700 hover:scale-150 md:hidden;
+  }
+
+  .movile-menu {
+    @apply absolute top-full right-0 left-0 origin-top transform overflow-hidden transition-all duration-300 ease-in-out;
+  }
 }
 
 * {
@@ -26,11 +73,15 @@
   height: 100vh;
   width: 40vw;
   min-width: 280px;
-  background-image: url("./assets/tenis.png"), url("assets/bg1.png"),
-    url("assets/bg2.png");
+  background-image:
+    url("./assets/tenis.png"), url("assets/bg1.png"), url("assets/bg2.png");
   background-repeat: no-repeat;
-  background-position: 100% 0%, 100% 0%, 100% 0%; /* Pegado al top */
-  background-size: contain, contain, contain; /* Cambiado a contain para tenis.png */
+  background-position:
+    100% 0%,
+    100% 0%,
+    100% 0%; /* Pegado al top */
+  background-size:
+    contain, contain, contain; /* Cambiado a contain para tenis.png */
   z-index: -1;
 }
 
@@ -45,7 +96,9 @@
 }
 
 .menu-element {
-  transition: border-radius 0.2s ease-in-out, padding 0.1s ease-in-out,
+  transition:
+    border-radius 0.2s ease-in-out,
+    padding 0.1s ease-in-out,
     transform 0.5s ease-in-out;
 }
 
@@ -57,4 +110,53 @@
 /* Estado cerrado */
 .menu-element.closed {
   border-radius: 5rem;
+}
+
+/* Animación de rebote para la pelota de tenis */
+@keyframes bounce-drop {
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  25% {
+    transform: translateY(0px) rotate(90deg);
+  }
+  35% {
+    transform: translateY(-30px) rotate(135deg);
+  }
+  50% {
+    transform: translateY(0px) rotate(180deg);
+  }
+  60% {
+    transform: translateY(-15px) rotate(225deg);
+  }
+  75% {
+    transform: translateY(0px) rotate(270deg);
+  }
+  85% {
+    transform: translateY(-5px) rotate(315deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(360deg);
+  }
+}
+
+.tennis-ball-bounce {
+  animation: bounce-drop 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Animación de gradiente en movimiento para botones */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

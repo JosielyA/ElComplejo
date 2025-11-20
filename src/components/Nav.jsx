@@ -1,67 +1,87 @@
 import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import tenisBall from "../assets/tennisball.png";
 import logo from "../assets/logo.png";
 
 export const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [hoveredLink, setHoveredLink] = useState(null);
+  const location = useLocation();
+
+  // Determinar el link activo basado en la ruta actual
+  const getLinkFromPath = (path) => {
+    const p = path.toLowerCase();
+    if (p === "/" || p === "") return "Inicio";
+    if (p.includes("acerca")) return "Acerca";
+    if (p.includes("reservas")) return "Reservas";
+    return "Inicio";
+  };
+
+  const currentLink = getLinkFromPath(location.pathname);
+
+  // El link que se debe mostrar como activo (hover o actual)
+  const activeLink = hoveredLink || currentLink;
 
   return (
-    <nav className="fixed top-6 left-6 right-6 z-50">
+    <nav className="fixed top-6 right-6 left-6 z-50">
       {/* Contenedor principal que mantiene la forma circular */}
       <div className="relative">
         {/* Navbar circular */}
         <div
-          className={`bg-white/80 shadow-2xl menu-transition menu-element ${
+          className={`menu-transition menu-element bg-white/80 shadow-2xl ${
             isMenuOpen ? "" : "closed"
-          } p-5 border border-gray-300/50 max-w-7xl 2xl:max-w-[80%] 2xl:flex 2xl:flex-col 2xl:place-content-center 2xl:h-36 2xl:px-15 mx-auto transition-all duration-500 ease-in-out`}
+          } mx-auto max-w-7xl border border-gray-300/50 p-5 transition-all duration-500 ease-in-out 2xl:flex 2xl:h-36 2xl:max-w-[80%] 2xl:flex-col 2xl:place-content-center 2xl:px-15`}
         >
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <div className="flex items-center">
               <img
-                className="w-40 md:w-48 lg:w-80 2xl:w-96 h-auto"
+                className="h-auto w-40 md:w-48 lg:w-80 2xl:w-96"
                 src={logo}
                 alt="logo"
               />
             </div>
 
-            <div className="hidden md:flex items-center space-x-10">
-              <div className="flex items-center relative space-x-3">
-                <img
-                  src={tenisBall}
-                  className="size-8 lg:size-10 absolute z-0 -left-3 lg:-left-4 drop-shadow-3xl"
-                  alt="tenis"
-                />
-                <a
-                  className="text-morado hover:text-morado font-bold italic text-lg lg:text-2xl 2xl:text-2xl 3xl:text-4xl block z-1 transition duration-700"
-                  href="#"
+            <div
+              className="hidden items-center space-x-10 md:flex"
+              onMouseLeave={() => setHoveredLink(null)}
+            >
+              {["Inicio", "Acerca", "Reservas"].map((item) => (
+                <div
+                  key={item}
+                  className="relative flex items-center space-x-3"
+                  onMouseEnter={() => setHoveredLink(item)}
                 >
-                  Inicio
-                </a>
-              </div>
-              <a
-                className="text-gris-oscuro hover:text-morado font-bold italic text-lg lg:text-2xl 2xl:text-2xl 3xl:text-4xl block z-1 transition duration-70"
-                href="#"
-              >
-                Acerca
-              </a>
-              <a
-                className="text-gris-oscuro hover:text-morado font-bold italic text-lg lg:text-2xl 2xl:text-2xl 3xl:text-4xl block z-1 transition duration-70"
-                href="#"
-              >
-                Reservas
-              </a>
+                  {activeLink === item && (
+                    <img
+                      src={tenisBall}
+                      className="tennis-ball tennis-ball-bounce -left-3"
+                      alt="tenis"
+                    />
+                  )}
+                  <Link
+                    className={
+                      activeLink === item
+                        ? "active-link-nav"
+                        : "inactive-link-nav"
+                    }
+                    to={item === "Inicio" ? "/" : `/${item.toLowerCase()}`}
+                  >
+                    {item}
+                  </Link>
+                </div>
+              ))}
             </div>
 
-            <button className="hidden 2xl:text-3xl 2xl:px-10 2xl:py-4 md:block bg-linear-to-r italic from-morado via-azul to-lima text-white font-bold py-3 px-8 rounded-full transition duration-700 transform hover:scale-105 shadow-lg">
+            <button className="button-nav hidden md:block">
               Reserva Ahora
             </button>
 
             <button
-              className="md:hidden p-3 bg-gray-100 rounded-full hover:bg-gray-200 transition duration-700"
+              className="burger-button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               <svg
-                className="w-6 h-6"
+                className="size-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -88,48 +108,41 @@ export const Nav = () => {
 
         {/* Menú móvil - Posicionado absolutamente debajo del navbar */}
         <div
-          className={`absolute top-full left-0 right-0 transition-all duration-300 ease-in-out origin-top transform overflow-hidden ${
+          className={`movile-menu lg:hidden ${
             isMenuOpen
-              ? "scale-y-100 opacity-100 max-h-[800px] pointer-events-auto"
-              : "scale-y-0 opacity-0 max-h-0 pointer-events-none"
+              ? "pointer-events-auto max-h-[800px] scale-y-100 opacity-100"
+              : "pointer-events-none max-h-0 scale-y-0 opacity-0"
           }`}
         >
-          <div className="bg-white/80 shadow-xl rounded-t-none rounded-b-2xl p-6 border border-gray-300/50">
+          <div className="rounded-t-none rounded-b-2xl border border-gray-300/50 bg-white/80 p-6 shadow-xl">
             <div className="space-y-4">
-              <div className="flex items-center  space-x-3 relative  p-4 rounded-xl">
-                <img
-                  src={tenisBall}
-                  className="size-8 absolute left-1 drop-shadow-3xl"
-                  alt="tenis"
-                />
-                <a
-                  className="text-morado font-bold italic z-1 text-lg"
-                  href="#"
+              {["Inicio", "Acerca", "Reservas"].map((item) => (
+                <div
+                  key={item}
+                  className="relative flex items-center space-x-3 rounded-xl p-4"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Inicio
-                </a>
-              </div>
-              <div className=" p-4 rounded-xl">
-                <a
-                  className="text-gris-oscuro hover:text-morado font-bold italic text-lg block"
-                  href="#"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Acerca
-                </a>
-              </div>
-              <div className=" p-4 rounded-xl">
-                <a
-                  className="text-gris-oscuro hover:text-morado font-bold italic text-lg block"
-                  href="#"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Reservas
-                </a>
-              </div>
+                  {currentLink === item && (
+                    <img
+                      src={tenisBall}
+                      className="tennis-ball tennis-ball-bounce left-1"
+                      alt="tenis"
+                    />
+                  )}
+                  <Link
+                    className={
+                      currentLink === item
+                        ? "active-link-nav-movile"
+                        : "inactive-link-nav-movile"
+                    }
+                    to={item === "Inicio" ? "/" : `/${item.toLowerCase()}`}
+                  >
+                    {item}
+                  </Link>
+                </div>
+              ))}
               <button
-                className="w-full bg-linear-to-r from-morado via-azul to-lima text-white font-bold italic py-4 px-6 rounded-full transition duration-700 shadow-lg"
+                className="button-nav w-full"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Reserva Ahora
