@@ -108,7 +108,7 @@ export const Nav = () => {
 
         {/* Menú móvil - Posicionado absolutamente debajo del navbar */}
         <div
-          className={`movile-menu lg:hidden ${
+          className={`movile-menu md:hidden ${
             isMenuOpen
               ? "pointer-events-auto max-h-[800px] scale-y-100 opacity-100"
               : "pointer-events-none max-h-0 scale-y-0 opacity-0"
